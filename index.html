@@ -664,17 +664,21 @@ function tick(){
 
 /* =====================================================================
    JUMP SCARE
-   Each new person (after IDLE_MS with no taps) gets a secret random tap
-   number. When they reach it, the scare fires. Never more often than
-   the gap for the chosen level.
+   After each scare there is a random wait (the gap for the chosen level).
+   Once it's over, the next person gets a secret random tap number, and
+   the scare fires when they reach it.
    ===================================================================== */
 const LEVELS = {
-  rare:   { min:5, max:10, gap:300000 },  // at most once every 5 minutes
-  normal: { min:3, max:8,  gap:120000 },  // at most once every 2 minutes
-  often:  { min:2, max:5,  gap:45000  },  // at most once every 45 seconds
+  rare:   { min:5, max:10, gapMin:60000, gapMax:120000 },  // wait 1 to 2 minutes after a scare
+  normal: { min:3, max:8,  gapMin:20000, gapMax:30000  },  // wait 20 to 30 seconds
+  often:  { min:2, max:5,  gapMin:10000, gapMax:10000  },  // wait 10 seconds
 };
 const NEW_PERSON_MS = 8000;   // this long with no taps = the next tap is a new person (for scares)
-let scaring = false, lastScare = -Infinity, sessionTaps = 0, target = 0, lastTouch = 0, scareTimer = null, scareTok = 0;
+let scaring = false, lastScare = -Infinity, scareGap = 0, sessionTaps = 0, target = 0, lastTouch = 0, scareTimer = null, scareTok = 0;
+function pickGap(){
+  const L = LEVELS[scareSet.level] || LEVELS.normal;
+  scareGap = L.gapMin + Math.random() * (L.gapMax - L.gapMin);
+}
 function newSession(){
   const L = LEVELS[scareSet.level] || LEVELS.normal;
   sessionTaps = 0;
@@ -687,8 +691,7 @@ function wake(){
 }
 function afterTap(){
   if (!scareSet.enabled || scaring || scareTimer) return;
-  const L = LEVELS[scareSet.level] || LEVELS.normal;
-  const ready = performance.now() - lastScare > L.gap;
+  const ready = performance.now() - lastScare > scareGap;
   if (sessionTaps < 0){ if (!ready) return; newSession(); }   // after the wait, a steady crowd can be scared again
   sessionTaps++;
   if (sessionTaps >= target && ready){
@@ -740,7 +743,7 @@ function jumpScare(counted){
   scaring = true;
   const tok = ++scareTok, done = () => { if (tok === scareTok) endScare(); };
   setTimeout(done, 6000);   // safety net: the screen can never get stuck on a scare
-  if (counted){ lastScare = performance.now(); sessionTaps = -1; }   // one scare per person
+  if (counted){ lastScare = performance.now(); pickGap(); sessionTaps = -1; }   // one scare per person, then a wait
   try {
     closeAdmin();
     parts = [];
@@ -961,7 +964,7 @@ function drawTools(confirming){
   if (scareSet.enabled){
     on($('#sSnd'), () => { scareSet.sound = !scareSet.sound; saveScare(); drawTools(); });
     on($('#sVol'), () => { const steps = [.25,.5,.8,1]; scareSet.volume = steps[(steps.indexOf(scareSet.volume)+1) % steps.length]; saveScare(); drawTools(); });
-    $('#panel').querySelectorAll('[data-lv]').forEach(b => on(b, () => { scareSet.level = b.dataset.lv; saveScare(); newSession(); drawTools(); }));
+    $('#panel').querySelectorAll('[data-lv]').forEach(b => on(b, () => { scareSet.level = b.dataset.lv; saveScare(); pickGap(); newSession(); drawTools(); }));
     on($('#sTest'), () => { closeAdmin(); setTimeout(() => prepareScare().then(() => jumpScare(false)), 600); });
   }
   on($('#reset'), () => {

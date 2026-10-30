@@ -37,11 +37,12 @@ These settings are saved on the screen and stay set from week to week.
 ## How the jump scare works
 
 - Each new person gets a secret random tap number. When they reach it, the zombie or the scarecrow lunges out with no warning and screams. Next comes a "GOTCHA! Happy Halloween!" screen, and their vote still counts.
-- Each person gets scared only once. After 8 seconds with no taps, the next tap counts as a new person. Once the wait time has passed, a steady crowd can get scared again.
+- After a scare there's a wait. When the wait is over, the scare can strike again after a few more taps, even if the same crowd is still voting.
 - How often:
-  - **Rare:** on tap 5 to 10, at most once every 5 minutes.
-  - **Normal:** on tap 3 to 8, at most once every 2 minutes.
-  - **Often:** on tap 2 to 5, at most once every 45 seconds.
+  - **Rare:** wait 1 to 2 minutes, then on tap 5 to 10.
+  - **Normal:** wait 20 to 30 seconds, then on tap 3 to 8.
+  - **Often:** wait 10 seconds, then on tap 2 to 5.
+- Changing the setting in the staff panel takes effect right away.
 - The two pictures take turns.
 - The scream is a recording from Pixabay (free to use), built into the page. If it can't play, a scream made in code plays instead.
 - The only flash is one quick, soft brightening as the monster appears. Nothing strobes.
