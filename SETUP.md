@@ -44,7 +44,7 @@ These settings are saved on the screen and stay set from week to week.
   - **Often:** on tap 2 to 5, at most once every 45 seconds.
 - The two pictures take turns.
 - The scream is a recording from Pixabay (free to use), built into the page. If it can't play, a scream made in code plays instead.
-- The flicker stays under 3 flashes per second.
+- The only flash is one quick, soft brightening as the monster appears. Nothing strobes.
 
 **Check the sound on the real screen.** Some OptiSigns players mute website audio. Use **Test scare**. Browsers only allow sound after someone touches the screen, and the PIN taps count.
 
