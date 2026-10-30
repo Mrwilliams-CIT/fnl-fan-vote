@@ -1,54 +1,68 @@
 # Friday Night Lights Fan Vote: Setup
 
-The whole kiosk is one file, `index.html`. The logos are built into it, so it doesn't need any other files.
+The whole kiosk is one file, `index.html`. The poster art, logos, and scare pictures are built into it.
 
-## 1. Host the page
+## Where it lives
 
-OptiSigns needs a URL. Use the same steps as Fright Night:
-1. Drag the `friday-night-lights-vote` folder onto **app.netlify.com/drop**.
-2. You'll get a link like `https://something.netlify.app`.
+- Live page: **https://mrwilliams-cit.github.io/fnl-fan-vote/**
+- Code: https://github.com/Mrwilliams-CIT/fnl-fan-vote
 
-If an uploader asks for a zip (like OptiSigns' HTML5 content), use `friday-night-lights-vote.zip`.
+In OptiSigns, use a **Website** app pointed at the live page, set to portrait. When the page is updated on GitHub, the screen picks up the change the next time it reloads. You don't need to change anything in OptiSigns.
 
-## 2. OptiSigns
-
-1. Add a **Website** app that points at the Netlify link.
-2. Set the screen to **portrait**.
-3. Tap-test the real screen to make sure touches reach the page.
-4. Turn off OptiSigns' auto-refresh, or set it to a long interval. A refresh won't erase votes, but it does interrupt students.
+Turn off OptiSigns' auto-refresh, or set it to a long interval. A refresh won't erase votes, but it does interrupt students.
 
 ## How votes are saved
 
 - Votes are saved **in the screen's browser only**. A reload or a reboot keeps them.
 - Clearing that browser's data, or switching to a different player or browser, starts the count over.
-- Votes from a test on your laptop stay on your laptop. They don't show up on the kiosk.
+- Votes cast on a laptop or phone stay on that device. They don't show up on the kiosk.
+- A new week number starts a fresh count.
 
 ## Staff tools
 
 Hold the **top-left corner** of the screen for 3 seconds, then enter the PIN (**1031**).
-- **Results:** shows each game's vote counts.
+- **Results:** shows each game's votes, Salem cheers, and students scared.
+- **Scares ON/OFF:** turns jump scares on or off.
+- **Sound ON/OFF:** quiet mode. The scare still shows, with no scream.
+- **Volume:** tap to cycle through 25%, 50%, 80%, and 100%.
+- **Rare / Normal / Often:** how often scares happen (see below).
+- **Test scare:** runs a scare right away so you can check the picture and sound. It doesn't count toward "Students Scared."
 - **Reset all votes:** tap it twice to confirm.
 
-To change the PIN, edit `ADMIN_PIN` in the SETTINGS block near the top of `index.html`.
+These settings are saved on the screen and stay set from week to week.
+
+## How the jump scare works
+
+- After 20 seconds with no taps, the next person counts as someone new.
+- Each new person gets a secret random tap number. When they reach it, the lights flicker, and then the zombie or the scarecrow lunges at them with a scream. Next comes a "GOTCHA! Happy Halloween!" screen, and their vote still counts.
+- Each person gets scared only once.
+- How often:
+  - **Rare:** on tap 5 to 10, at most once every 5 minutes.
+  - **Normal:** on tap 3 to 8, at most once every 2 minutes.
+  - **Often:** on tap 2 to 5, at most once every 45 seconds.
+- The two pictures take turns.
+- The scream is made in code, so there's no sound file.
+- The flicker stays under 3 flashes per second.
+
+**Check the sound on the real screen.** Some OptiSigns players mute website audio. Use **Test scare** after someone has tapped the screen at least once. Browsers only allow sound after a tap.
 
 ## Built-in safeguards
 
-- After each vote, that game pauses for 2 seconds and shows "VOTE COUNTED!" Taps faster than a quarter second apart are ignored on every game.
+- After each vote, that game pauses for 2 seconds and shows "VOTE COUNTED!" The Salem cheer button pauses for about 1 second.
+- Taps faster than a quarter second apart are ignored.
+- Taps are ignored during a scare.
 - Pinch zoom, double-tap zoom, and right-click menus are turned off.
 - If nobody taps for 20 seconds, random logos bounce with a "TAP ME!" hint.
-- Every 50 total votes, a big celebration banner appears.
 
 ## Next week
 
-Open `index.html` in a text editor and change the **SETTINGS** block near the top:
-- `WEEK`. A new week number starts a fresh set of votes.
-- Each game's `when`, `name`, `rec` (record), and `color`.
-- `home: true` puts a HOMETOWN tag on that team.
+Send Claude the new preview poster. The background, title, matchups, and logos all come from it.
 
-Teams already in the `LOGOS` list at the bottom of the file can be reused. A brand new opponent needs its logo added.
-
-The title art and scenery come from the weekly preview poster, which is built into the page. It still says "Week 10 Preview" and the October 23-24 dates. Each week, send Claude the new poster so the background, title, and logos all match.
+To change something small yourself, edit the **SETTINGS** block near the top of `index.html`:
+- `WEEK`, and each game's names, records, seeds, colors, and times.
+- `CHEER` is the "Cheer for..." card for a team with a bye. Set it to `null` to hide it.
+- `SCARES` holds the scare defaults for a screen that has never been changed in the staff panel.
 
 ## Try it
 
-Open `index.html` in a browser. Add `?seed` to the end of the URL to fill it with random practice votes. Use the staff panel to reset them afterward.
+Open the live page in a browser. Add `?seed` to the end of the URL to fill it with random practice votes. Use the staff panel to reset them afterward.
